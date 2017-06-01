@@ -1,0 +1,26 @@
+footer.footer
+	.container
+		.footer__top
+			.fti
+				.row.strike.company= company
+				.row.copy!= copy
+				.row
+					a(href="#").soc_btn.ico.ico-mail
+					a(href="#").soc_btn.ico.ico-vk
+			.fti
+				nav.navbar
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_1') Главная
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_2') Цены
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_3') Почему мы?
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_4') Документы
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_5') Полезные статьи (18+)
+					li.footer_nav_itm: a.footer_nav_lnk(href='menu_6') Контакты
+			.fti
+				.row.strike.foo-phone.merri= phone
+				.row
+					div #{adress.city},#[br]#{adress.street},#[br]#{adress.extra}
+		.footer__bottom
+			.fbi
+				span.strike.merri 18+&nbsp;
+				span Некоторые материалы имеют возрастные ограничения.
+			+credits

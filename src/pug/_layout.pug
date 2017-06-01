@@ -1,0 +1,29 @@
+doctype html
+block vars
+	-
+		page = {
+			lang:     'ru',
+			title:    'Нефертити',
+			desc:     'Медицинская клиника'
+		}
+
+	include _data
+
+html(lang= page.lang)
+	head
+		block head
+			include _head
+		block styles
+			include _styles
+
+	body
+		block header
+			include _header
+		block main
+			block sidebar
+		block footer
+			include _footer
+		block modal
+			include _modal
+		block scripts
+			include _scripts

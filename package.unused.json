@@ -1,0 +1,9 @@
+{
+	"devDependencies": {
+		"gulp-jade2php": "^1.0.4",
+		"gulp-jade-php": "^2.0.0-0",
+		"jade2php": "^1.2.3",
+		"php2pug": "^0.3.2",
+		"pug-php-filter": "0.0.1"
+	}
+}

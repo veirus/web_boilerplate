@@ -1,0 +1,32 @@
+header.header
+	.header__top
+		.container
+			a(href='/').logo.header__logo
+			.header__phone
+				.header_ico
+					.ico.i-hr-phone
+				.pri Контактный телефон:
+				.sec= phone
+			.header__adress
+				.header_ico
+					.ico.i-hr-loc
+				.pri= adress.city
+				.sec= adress.street
+			a.btn.header__btn.js-btn_modal(href="#order-modal") Записаться на приём
+	.header__bottom
+		.container
+			nav.navbar
+				li(class=page.name === 'home'     ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='/') Главная
+				li(class=page.name === 'prices'   ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='/02') Цены
+				li(class=page.name === 'whyus'    ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='/03') Почему мы?
+				li(class=page.name === 'docs'     ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='/04') Документы
+				li(class=page.name === 'articles' ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='#menu_5') Полезные статьи (18+)
+				li(class=page.name === 'contacts' ? 'navbar_item active' : 'navbar_item'): a.navbar_lnk(href='#menu_6') Контакты
+				li(class="header__search")
+					form.search
+						label.sr-only( aria-label="Search" for="nf-search" ) Поиск по сайту
+						input.search_input#nf-search(type='text', placeholder='Поиск по сайту')
+						button.search_btn.btn-form(type='submit')
+							.ico.ico-search
+							span.label Поиск
+

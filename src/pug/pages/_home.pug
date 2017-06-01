@@ -1,0 +1,96 @@
+.container
+	//- everything are inside of the SINGLE container
+	section.js-banner
+		.sli_frame
+			for i in [1,2,3]
+				li.sli_slide(class= i===1 ? 'active' : '')
+					a.sli_lnk(href="#")
+						.sli_img
+							img(src="/assets/sli/sli_0"+i+".jpg" width="1140")
+						.sli_inf
+							h2.sli_title Консультативно-терапевтическое отделение
+							p.sli_txt Прием в день обращения терапевтов и всех специалистов узкого профиля: аллергологов-иммунологов, дерматовенерологов, кардиологов, неврологов, эндокринологов, гастроэнтерологов.
+						.sli_round
+		.sli_next
+		.sli_prev
+		.sli_ctrl
+
+	main.main
+		block sidebar
+			include /_sidebar
+		.content
+			//- contents will be limited to 8 columns
+			section.about
+				.about_bg
+				.sect_in
+					.label Нефертити
+					h2.title Коротко о нашей клинике
+					.hr
+					p.txt Мы работаем в сфере медицинского обслуживания с 2014 г. Клиника "Нефертити" - это самое современное медицинское оборудование и опытный квалифицированный персонал. Цель нашей клиники - оказание медицинских и косметологических услуг на самом высоком уровне.
+				.sect_in.about_why
+					h3.title.title-decor
+						span.title-decor-l
+						span Почему именно мы?
+						span.title-decor-r
+					.why_in
+						.why
+							.ico.ico-why-1
+							h4.why_lbl  Команда профессионалов
+							.why_txt У нас работают врачи с многолетним практическим опытом, зарекомендовавшие себя как компетентные специалисты.
+						.vr
+						.why
+							.ico.ico-why-2
+							h4.why_lbl Оборудование по последнему слову техники
+							.why_txt У нас - только самая современная, точная и эффективная диагностическая аппаратура.
+						.vr
+						.why
+							.ico.ico-why-3
+							h4.why_lbl Лояльная ценовая политика
+							.why_txt Мы предлагаем одно из лучших соотношений цены к качеству. Запишитесь на консультацию к нам, и Вы не останетесь разочарованными.
+
+			section.js-personel
+				.sli_frame
+					each f in [1,2,3]
+						a.sli_slide.sli_lnk(href="#")
+								.person_img
+									img(src="/assets/sli/sli_person_0"+f+".png" width="100")
+								.label Директор клиники
+								h3.title.person_name Юрков Дмитрий Николаевич
+								.hr
+								p.txt Пластический хирург, онколог, торакальный хирург, врач высшей категории.
+				.sli_next
+				.sli_prev
+
+			section.articles
+				.sect_in
+					h3.title.title-decor
+						span.title-decor-l
+						span Полезные статьи
+						span.title-decor-r
+					.txt Все материалы данного раздела предназначены только для взрослых, тем что от 18 и старше.
+				.sect_in.js-articles_sli
+					.sli_frame
+						for i in [1,2,3]
+							.sli_slide
+								.sli_preview
+									img(src="/assets/sli/sli_articles_0"+i+".jpg")
+								.label Планирование беременности
+								a.sli_lnk-article(href="#") Как родить мальчика или девочку. Планирование пола ребенка.
+								a.sli_lnk-read(href="#") Читать дальше
+					.sli_next
+					.sli_prev
+				.sect_in
+					a.btn(href="#") Другие статьи
+
+	section.awards
+		.js-awards_bg
+		h3.title.title-decor.awards_title Наши лицензии, сертификаты и награды
+		.js-awards_sli
+			.sli_frame
+				for i in [1,2,3,4,5,6,7,8,9]
+					.sli_slide
+						a.sli_lnk(href="#")
+							.sli_img
+								img(src="/assets/sli/sli_awards_0"+i+".jpg")
+			.sli_next
+			.sli_prev

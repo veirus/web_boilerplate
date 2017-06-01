@@ -1,0 +1,26 @@
+- var img           = "./assets/img/"
+- var company       = 'Медицинская клиника «Нефертити»'
+- var adress        = { city: "г.Березники", street: "ул. Пятилетки, д. 114а", extra: "(вход со двора)" }
+- var email         = ""
+- var phone         = "+7 902 200-40-20"
+- var copyYear      = "2014 — 2017 г."
+- var copyTxt       = "Все права защищены"
+- var copy          = `&copy; ${copyYear} | ${copyTxt}`
+- var prostor       = { href: 'http://prostordesign.ru/', name: 'PROSTOR design', txt: 'Разработка сайта '}
+- var meta          = { keywords: 'Медицинская клиника "Нефертити"', desc: page.desc }
+
+mixin phoneLink(phoneString)
+	- var cleanPhone = phoneString.replace(/\(|\)|\s|\-/g, '')
+	a.phone(href="tel:#{cleanPhone}")= phoneString
+
+mixin credits
+	.credits
+		= prostor.txt
+		a.prostor(href=prostor.href, target='_blank')= prostor.name
+
+mixin json()
+	- var oldbuf = buf; buf = [];
+	block
+	- var res = JSON.stringify(JSON.parse(buf.join('')));
+	- buf = oldbuf;
+	!= res
