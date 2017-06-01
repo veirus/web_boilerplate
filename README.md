@@ -1,1 +1,1 @@
-Сайт для клиники "Нефертити" в Березниках.
+Base boilerplate for webdev.
