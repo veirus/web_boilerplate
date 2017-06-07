@@ -14,18 +14,22 @@ var gulp         = require('gulp'),
 	flexbugs     = require('postcss-flexbugs-fixes'),
 	fontmag      = require('postcss-font-magician'),
 	lookup       = require('postcss-property-lookup'),
-	pugPHPFilter = require('pug-php-filter'),
-	php2pug      = require('gulp-jade-php'),
+	// pugPHPFilter = require('pug-php-filter'),
+	// php2pug      = require('gulp-jade-php'),
 	sync         = require('browser-sync').create();
-
-var isDist = $.util.env.type === 'dist';
-var outputFolder = isDist ? 'dist' : 'public_html/wp-content';
 
 // Directories {{{
 // https://habrahabr.ru/post/250569/
 var _src = 'src/';
 var _ass = 'assets/';
 var _theme = 'themes/nefertity/';
+var cssname= 'style.css';
+var jsname=  'env.js';
+var devFolder = 'build';
+
+var isDist = $.util.env.type === 'dist';
+var outputFolder = isDist ? 'dist' : devFolder;
+
 
 var src = {
 	pug:   _src + 'pug/**/!(_)*.pug',
@@ -36,6 +40,7 @@ var src = {
 	js:    _src + _ass + 'js/**/*.js',
 	img:   _src + _ass + 'img/**/*.{JPG,jpg,jpeg,png,gif,svg}',
 	fonts: _src + _ass + 'fonts/**/*.{svg,eot,ttf,otf,woff,woff2}',
+	favicon:_src + _ass + 'favicon/**/*.{png,ico,svg}',
 	theme: _src + _theme + '**/!(_)*.*'
 };
 
@@ -45,7 +50,7 @@ var dest = {
 	css:   outputFolder + '/' + _theme + _ass + 'css/',
 	img:   outputFolder + '/' + _theme + _ass + 'img/',
 	fonts: outputFolder + '/' + _theme + _ass + 'fonts/',
-	theme: outputFolder + '/' + _theme
+	theme: outputFolder + '/' + _theme,
 };
 
 var watch = {
@@ -70,7 +75,7 @@ var clean = {
 // BrowserSync {{{
 var config = {
 	server: {
-		baseDir: './public_html'
+		baseDir: devFolder,
 	},
 	notify: false,
 	host: 'localhost',
@@ -103,6 +108,7 @@ function reload(done) {
 	done();
 }
 // BrowserSync }}}
+// utility - cleaning, copying files, etc. {{{ //
 
 // Delete the build directory
 gulp.task('clean-all', function() {
@@ -110,9 +116,14 @@ gulp.task('clean-all', function() {
 		.pipe($.rimraf());
 });
 
+gulp.task('favicon', function() {
+	return gulp.src(src.favicon)
+		.pipe($.newer(dest.html))
+		.pipe(gulp.dest(dest.html));
+});
+
 gulp.task('img', function() {
-	// since is only on gulp4
-	return gulp.src(src.img, { since: gulp.lastRun('img') })
+	return gulp.src(src.img)
 		.pipe($.newer(dest.img))
 		.pipe(gulp.dest(dest.img));
 });
@@ -127,6 +138,7 @@ gulp.task('fonts', function() {
 		.pipe($.newer(dest.fonts))
 		.pipe(gulp.dest(dest.fonts));
 });
+
 gulp.task('theme', function() {
 	return gulp.src(src.theme)
 		.pipe($.newer(dest.theme))
@@ -134,7 +146,7 @@ gulp.task('theme', function() {
 });
 
 gulp.task('js', function() {
-	return gulp.src(src.js, { since: gulp.lastRun('js') })
+	return gulp.src(src.js)
 		.pipe($.newer(dest.js))
 		.pipe(gulp.dest(dest.js));
 });
@@ -149,6 +161,8 @@ gulp.task('csso-dev', function () {
 		.pipe(gulp.dest(dest.css));
 });
 
+// }}} utility - cleaning, copying files, etc. //
+// CSS {{{ //
 // Compile Sass - example task
 // gulp.task('sass', function() {
 // 	return gulp.src(src.scss)
@@ -173,7 +187,7 @@ gulp.task('postcss', function() {
 		}))
 		.pipe($.sourcemaps.init())
 		.pipe($.postcss([
-			atImport({ from: 'assets/css/style.css' }),
+			atImport({ from: 'assets/css/'+cssname }),
 			lookup(),
 			// fontmag(),
 			lost(),
@@ -200,6 +214,8 @@ gulp.task('css', function (done) {
 	done();
 });
 
+// }}} CSS //
+// PUG templates {{{ //
 gulp.task('pug', function(){
 	// return gulp.src(src.pug, { since: gulp.lastRun('pug') })
 	return gulp.src(src.pug)
@@ -212,14 +228,27 @@ gulp.task('pug', function(){
 			pretty: isDist ? false : true,
 			basedir: __dirname + '/src/pug/',
 			debug: false,
-			filters: {
-				php: pugPHPFilter
+			locals: {
+				cssPath: _ass + 'css/',
+				cssName: cssname,
+				jsPath: _ass + 'js/',
+				jsName: jsname,
+			},
+			// filters: {
+			//	php: pugPHPFilter
+			// }
+		}))
+		.pipe($.rename(function(path){
+			if (path.basename=='index'){
+				return;
 			}
+			path.dirname=path.basename.split('-').join('/');
+			path.basename='index';
 		}))
 		.pipe(gulp.dest(dest.html))
 		// .pipe(sync.stream({ once: true }));
 		// .pipe(sync.stream());
-		.pipe(sync.reload({ stream: true }));
+		.pipe(sync.reload({ stream: true, once: true }));
 });
 
 gulp.task('p2p', function() {
@@ -245,11 +274,11 @@ gulp.task('p2p', function() {
 		}))
 		.pipe(gulp.dest('p2p'));
 });
+// }}} PUG templates //
 
 // Build'em all!
-gulp.task('build', gulp.series('clean-all', 'css', 'pug', 'img', 'fonts'));
+gulp.task('build', gulp.series('clean-all', 'img', 'fonts', 'js', 'postcss', 'pug'));
 
-// Слежка
 gulp.task('watch', function (done) {
 	gulp.watch( watch.js,    gulp.series('js', reload) );
 	gulp.watch( watch.img,   gulp.series('img', reload) );
@@ -257,8 +286,9 @@ gulp.task('watch', function (done) {
 	gulp.watch( watch.css,   gulp.series('postcss') );
 	gulp.watch( watch.html,  gulp.series('pug') );
 	gulp.watch( watch.theme, gulp.series('theme', reload) );
+	gulp.watch( watch.favicon, gulp.series('favicon') );
 	done();
 });
 
-// Задача по умолчанию
-gulp.task('default', gulp.series('proxy', 'watch'));
+gulp.task('default', gulp.series('serve', 'watch'));
+// vim:set noet sts=4 sw=4 ts=4 fdm=marker:
